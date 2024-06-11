@@ -4,20 +4,13 @@ import { Context, Hono } from "hono";
 import { Prisma, PrismaClient } from "@prisma/client/edge";
 import { withAccelerate } from "@prisma/extension-accelerate";
 import { sign } from "hono/jwt";
-import z from "zod";
-
+import { signupInputes } from "../zod";
 const app = new Hono<{
   Bindings: {
     DATABASE_URL: string;
     TOKEN_SECRET: string;
   };
 }>();
-
-const signupInputes = z.object({
-  email: z.string().email(),
-  password: z.string().min(6).max(10),
-  name: z.string().optional(),
-});
 
 export const signup = async (c: Context) => {
   const prisma = new PrismaClient({
@@ -28,7 +21,7 @@ export const signup = async (c: Context) => {
 
     const { success } = await signupInputes.safeParse(body);
     if (!success) {
-      c.status(404);
+      c.status(411);
       return c.json({
         error: "Invalid credentials",
       });
