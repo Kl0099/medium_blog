@@ -1,9 +1,10 @@
 import bcrypt from "bcryptjs";
 
-import { Hono } from "hono";
+import { Context, Hono } from "hono";
 import { Prisma, PrismaClient } from "@prisma/client/edge";
 import { withAccelerate } from "@prisma/extension-accelerate";
 import { sign } from "hono/jwt";
+import z from "zod";
 
 const app = new Hono<{
   Bindings: {
@@ -12,12 +13,26 @@ const app = new Hono<{
   };
 }>();
 
-export const signup = async (c: any) => {
+const signupInputes = z.object({
+  email: z.string().email(),
+  password: z.string().min(6).max(10),
+  name: z.string().optional(),
+});
+
+export const signup = async (c: Context) => {
   const prisma = new PrismaClient({
     datasourceUrl: c.env.DATABASE_URL,
   }).$extends(withAccelerate());
   try {
     const body = await c.req.json();
+
+    const { success } = await signupInputes.safeParse(body);
+    if (!success) {
+      c.status(404);
+      return c.json({
+        error: "Invalid credentials",
+      });
+    }
 
     const secret = c.env.TOKEN_SECRET;
     const saultround = 10;
