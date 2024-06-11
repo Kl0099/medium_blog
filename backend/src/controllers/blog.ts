@@ -15,11 +15,12 @@ export const createBlog = async (c: Context) => {
   }).$extends(withAccelerate());
   try {
     const body = await c.req.json();
+    const userId = c.get("userId");
     const blog = await prisma.post.create({
       data: {
         title: body.title,
         content: body.content,
-        authorId: body.id,
+        authorId: userId,
       },
     });
     c.status(200);
