@@ -3,6 +3,8 @@ import { Prisma, PrismaClient } from "@prisma/client/edge";
 import { withAccelerate } from "@prisma/extension-accelerate";
 import { sign, verify } from "hono/jwt";
 import { login, signup } from "./controllers/user";
+import { userRouter } from "./routes/user";
+import { blogRouter } from "./routes/blog";
 const app = new Hono<{
   Bindings: {
     DATABASE_URL: string;
@@ -26,17 +28,8 @@ app.use("/api/va/blog/*", async (c, next) => {
   }
 });
 
-app.post("/api/v1/signup", signup);
-app.post("/api/v1/login", login);
-app.post("/api/v1/blog", (c) => {
-  return c.text("Hello Hono!");
-});
-app.put("/api/v1/blog", (c) => {
-  return c.text("Hello Hono!");
-});
-app.get("/api/v1/blog/:id", (c) => {
-  return c.text("Hello Hono!");
-});
+app.route("/api/v1/user", userRouter);
+app.route("/api/v1/blog", blogRouter);
 
 app.get("/", (c) => {
   return c.text("hello");
