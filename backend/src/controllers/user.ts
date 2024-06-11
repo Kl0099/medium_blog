@@ -4,7 +4,7 @@ import { Context, Hono } from "hono";
 import { Prisma, PrismaClient } from "@prisma/client/edge";
 import { withAccelerate } from "@prisma/extension-accelerate";
 import { sign } from "hono/jwt";
-import { signupInputes } from "../zod";
+import { signupInputes } from "../../../common/src/index";
 const app = new Hono<{
   Bindings: {
     DATABASE_URL: string;
