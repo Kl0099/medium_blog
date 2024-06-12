@@ -2,6 +2,7 @@ import { Hono, Context } from "hono";
 import { Prisma, PrismaClient } from "@prisma/client/edge";
 import { withAccelerate } from "@prisma/extension-accelerate";
 import { sign } from "hono/jwt";
+import { blogInputes, updateBlogInputes } from "common-zod-module";
 const app = new Hono<{
   Bindings: {
     DATABASE_URL: string;
@@ -15,6 +16,11 @@ export const createBlog = async (c: Context) => {
   }).$extends(withAccelerate());
   try {
     const body = await c.req.json();
+    const { success } = blogInputes.safeParse(body);
+    if (!success) {
+      c.status(411);
+      return c.json({ error: "Invalid Inputes " });
+    }
     const userId = c.get("userId");
     const blog = await prisma.post.create({
       data: {
@@ -42,6 +48,11 @@ export const updateBlog = async (c: Context) => {
   }).$extends(withAccelerate());
   try {
     const body = await c.req.json();
+    const { success } = updateBlogInputes.safeParse(body);
+    if (!success) {
+      c.status(411);
+      return c.json({ error: "Invalid Inputes " });
+    }
     const blog = await prisma.post.update({
       where: {
         id: body.id,

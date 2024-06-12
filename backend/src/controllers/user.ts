@@ -4,7 +4,8 @@ import { Context, Hono } from "hono";
 import { Prisma, PrismaClient } from "@prisma/client/edge";
 import { withAccelerate } from "@prisma/extension-accelerate";
 import { sign } from "hono/jwt";
-import { signupInputes } from "../../../common/src/index";
+import { loginInputes, signupInputes } from "common-zod-module";
+import { LoginInputes } from "common-zod-module";
 const app = new Hono<{
   Bindings: {
     DATABASE_URL: string;
@@ -54,14 +55,19 @@ export const signup = async (c: Context) => {
   }
 };
 
-export const login = async (c: any) => {
+export const login = async (c: Context) => {
   try {
     const prisma = new PrismaClient({
       datasourceUrl: c.env.DATABASE_URL,
     });
 
     const body = await c.req.json();
+    const { success } = loginInputes.safeParse(body);
     // console.log(body);
+    if (!success) {
+      c.status(411);
+      return c.json({ error: "error while login" });
+    }
 
     const user = await prisma.user.findUnique({
       where: {
