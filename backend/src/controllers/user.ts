@@ -19,8 +19,9 @@ export const signup = async (c: Context) => {
   }).$extends(withAccelerate());
   try {
     const body = await c.req.json();
+    // console.log(body);
 
-    const { success } = await signupInputes.safeParse(body);
+    const { success } = signupInputes.safeParse(body);
     if (!success) {
       c.status(411);
       return c.json({
@@ -48,6 +49,7 @@ export const signup = async (c: Context) => {
 
     return c.json({ jwt: token });
   } catch (error) {
+    console.log("signup error: " + error);
     c.status(500);
     c.json({
       error: "error while creating user ",
@@ -61,8 +63,8 @@ export const login = async (c: Context) => {
       datasourceUrl: c.env.DATABASE_URL,
     });
 
-    const body = await c.req.json();
-    const { success } = loginInputes.safeParse(body);
+    const { email, password } = await c.req.json();
+    const { success } = loginInputes.safeParse({ email, password });
     // console.log(body);
     if (!success) {
       c.status(411);
@@ -71,7 +73,7 @@ export const login = async (c: Context) => {
 
     const user = await prisma.user.findUnique({
       where: {
-        email: body.email,
+        email: email,
       },
     });
 
@@ -79,7 +81,7 @@ export const login = async (c: Context) => {
       c.status(403);
       return c.json({ error: "user not found" });
     }
-    const isValid = await bcrypt.compare(body.password, user.password);
+    const isValid = await bcrypt.compare(password, user.password);
     if (!isValid) {
       c.status(401);
 

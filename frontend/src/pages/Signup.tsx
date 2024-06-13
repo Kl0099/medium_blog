@@ -1,18 +1,16 @@
 import { Auth } from "../components/Auth";
+import { Quete } from "../components/Quete";
+
 export const Signup = () => {
   return (
-    <div className=" flex md:flex-1  border items-center justify-center">
-      {/* //part1 div  */}
-      <div className=" md:w-[50%] w-full border flex items-center justify-center">
+    <div className="flex h-screen">
+      {/* Left part: Form */}
+      <div className="flex w-full md:w-1/2 items-center justify-center">
         <Auth type="signup" />
       </div>
-      <div className=" lg:block hidden">
-        <p>
-          "The Customer service i recieved was exceptional.The support team went
-          above and beyond to address my concern"
-        </p>
-        <p>Jules Winnfield</p>
-        <p>CEO, Acna inc</p>
+      {/* Right part: Testimonial */}
+      <div className="hidden md:flex w-1/2 items-center justify-center bg-gray-100">
+        <Quete />
       </div>
     </div>
   );

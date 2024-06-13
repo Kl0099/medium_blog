@@ -12,4 +12,4 @@ export const userRouter = new Hono<{
 }>();
 
 userRouter.post("/signup", signup);
-userRouter.post("/login", login);
+userRouter.post("/signin", login);
