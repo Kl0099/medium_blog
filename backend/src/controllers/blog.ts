@@ -48,6 +48,7 @@ export const updateBlog = async (c: Context) => {
   }).$extends(withAccelerate());
   try {
     const body = await c.req.json();
+    // console.log(body);
     const { success } = updateBlogInputes.safeParse(body);
     if (!success) {
       c.status(411);
@@ -64,8 +65,7 @@ export const updateBlog = async (c: Context) => {
     });
     c.status(200);
     return c.json({
-      message: "Blog successfully updated",
-      blogid: blog.id,
+      blog,
     });
   } catch (error) {
     c.status(500);
@@ -82,7 +82,15 @@ export const getAllBlog = async (c: Context) => {
     datasourceUrl: c.env.DATABASE_URL,
   }).$extends(withAccelerate());
   try {
-    const blog = await prisma.post.findMany();
+    const blog = await prisma.post.findMany({
+      include: {
+        author: {
+          select: {
+            name: true,
+          },
+        },
+      },
+    });
     c.status(200);
     return c.json({
       blog: blog,
@@ -101,6 +109,7 @@ export const getBlog = async (c: Context) => {
   }).$extends(withAccelerate());
   try {
     const body = await c.req.json();
+    console.log("body: " + body);
     const blog = await prisma.post.findFirst({
       where: {
         id: body.id,

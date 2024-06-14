@@ -22,11 +22,11 @@ blogRouter.use("/*", async (c, next) => {
   const header = c.req.header("authorization") || "";
 
   const token = header.split(" ")[1];
-  console.log("header : ", header);
-  console.log("token : ", token);
+  // console.log("header : ", header);
+  // console.log("token : ", token);
 
   const response = await verify(token, c.env.TOKEN_SECRET);
-  console.log("response : ", response);
+  // console.log("response : ", response);
   if (response) {
     //@ts-ignore
     c.set("userId", response.id);
@@ -40,4 +40,4 @@ blogRouter.use("/*", async (c, next) => {
 blogRouter.post("/", createBlog);
 blogRouter.put("/", updateBlog);
 blogRouter.get("/bulk", getAllBlog);
-blogRouter.get("/:id", getBlog);
+blogRouter.post("/:id", getBlog);

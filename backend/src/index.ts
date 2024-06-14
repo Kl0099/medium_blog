@@ -7,6 +7,7 @@ import { userRouter } from "./routes/user";
 import { blogRouter } from "./routes/blog";
 
 import { cors } from "hono/cors";
+import { getAllBlog } from "./controllers/blog";
 const app = new Hono<{
   Bindings: {
     DATABASE_URL: string;
@@ -17,6 +18,7 @@ const app = new Hono<{
 app.use("/*", cors());
 
 app.route("/api/v1/user", userRouter);
+app.get("/api/v1/blog/bulk", getAllBlog);
 app.route("/api/v1/blog", blogRouter);
 
 app.get("/", (c) => {

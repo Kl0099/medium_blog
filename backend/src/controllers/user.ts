@@ -42,6 +42,7 @@ export const signup = async (c: Context) => {
     });
     const payload = {
       id: user.id,
+      name: user.name,
       exp: Math.floor(Date.now() / 1000) + 60 * 15,
     };
 
@@ -88,7 +89,10 @@ export const login = async (c: Context) => {
       return c.json({ error: "invalid user or password" });
     }
 
-    const jwt = await sign({ id: user.id }, c.env.TOKEN_SECRET);
+    const jwt = await sign(
+      { id: user.id, name: user.name },
+      c.env.TOKEN_SECRET
+    );
 
     return c.json({ jwt: jwt });
   } catch (error) {
