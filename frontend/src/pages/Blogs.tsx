@@ -18,6 +18,7 @@ const Blogs = () => {
 
   const [blogs, setBlogs] = useState<Blog[]>([]);
   const [loading, setLoading] = useState(true); // Add a loading state
+  //@ts-ignore
   const [todoList, setTodoList] = useRecoilState(BlogAtom);
 
   const getBlogs = async () => {

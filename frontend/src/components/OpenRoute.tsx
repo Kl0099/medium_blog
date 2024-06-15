@@ -1,7 +1,7 @@
 import toast from "react-hot-toast";
 import { Navigate } from "react-router-dom";
-
-const OpenRoute = ({ children }: any) => {
+//@ts-ignore
+const OpenRoute = ({ childern }: any) => {
   const token = localStorage.getItem("token");
   if (token !== null) {
     return <Navigate to={"/blogs"} />;
