@@ -9,7 +9,7 @@ const AppBar = () => {
     <div className="flex justify-between items-center bg-white py-4 px-8">
       <Link
         to={"/blogs"}
-        className="text-2xl font-bold"
+        className="sm:text-2xl text-xl  mr-2 font-bold"
       >
         Medium
       </Link>
@@ -37,7 +37,7 @@ const AppBar = () => {
                 navigate("/signin");
                 toast.success("logged out successfully");
               }}
-              className="text-black hover:underline cursor-pointer mx-1"
+              className="text-black hover:underline cursor-pointer "
             >
               Logout
             </div>

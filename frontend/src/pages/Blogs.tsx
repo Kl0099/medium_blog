@@ -50,7 +50,7 @@ const Blogs = () => {
           .map((_, index) => (
             <div
               key={index}
-              className="mb-4 w-[40%] mx-auto"
+              className="mb-4 md:w-[40%] mx-auto"
             >
               <Skeleton
                 height={30}

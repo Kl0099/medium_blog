@@ -63,7 +63,7 @@ export const Blog = () => {
 
   const getBlog = async () => {
     const token = localStorage.getItem("token") || "";
-    console.log(token);
+    // console.log(token);
     try {
       const response = await axios.post(
         `${BACKENDURL}/api/v1/blog/${id}`,
@@ -76,12 +76,13 @@ export const Blog = () => {
           },
         }
       );
-      console.log(response.data);
+      // console.log(response.data);
       if (response) {
         setBlog(response.data.blog);
         setLoading(false);
       }
     } catch (error) {
+      toast.error("something went wrong!!!");
       console.log("error while get blog : ", error);
     }
   };
@@ -126,7 +127,7 @@ export const Blog = () => {
 
   return (
     <div className=" flex items-center justify-center mx-auto  p-4">
-      <div className="bg-white shadow-md mx-auto w-[40%]  container rounded-lg p-6">
+      <div className="bg-white shadow-md mx-auto md:w-[40%]  container rounded-lg p-6">
         {edit && <h1 className=" text-center mb-4">Edit your blog</h1>}
         {edit ? (
           <div className=" font-bold mb-2">
@@ -143,11 +144,11 @@ export const Blog = () => {
             />
           </div>
         ) : (
-          <h1 className="text-4xl font-bold mb-2">{blog.title}</h1>
+          <h1 className="md:text-4xl text-3xl font-bold mb-2">{blog.title}</h1>
         )}
         {!edit && (
           <div className="flex flex-row justify-between items-center  mb-7">
-            <p className="text-gray-600 ">
+            <p className="text-gray-600 text-sm ">
               Posted on {new Date(blog.createdAt).toLocaleDateString()}
             </p>
 
