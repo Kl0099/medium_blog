@@ -3,9 +3,11 @@ import { SignupInputes } from "common-zod-module";
 import { Link, useNavigate } from "react-router-dom";
 import { BACKENDURL } from "../config";
 import axios from "axios";
+import toast from "react-hot-toast";
 
 export const Auth = ({ type }: { type: "signup" | "signin" }) => {
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
   const [postInput, setPostInput] = useState<SignupInputes>({
     name: "",
     email: "",
@@ -13,6 +15,7 @@ export const Auth = ({ type }: { type: "signup" | "signin" }) => {
   });
 
   async function sendRequest() {
+    setLoading(true);
     try {
       const response = await axios.post(
         `${BACKENDURL}/api/v1/user/${type === "signin" ? "signin" : "signup"}`,
@@ -22,9 +25,15 @@ export const Auth = ({ type }: { type: "signup" | "signin" }) => {
       console.log(jwt);
       localStorage.setItem("token", jwt);
       navigate("/blogs");
+      toast.success(
+        `${type === "signin" ? "login successfull" : "signup successfull"}`
+      );
     } catch (error) {
       console.log("error", error);
+      toast.error("something went wrong");
+      toast.error("try again");
     }
+    setLoading(false);
   }
 
   return (
@@ -86,6 +95,7 @@ export const Auth = ({ type }: { type: "signup" | "signin" }) => {
         <button
           onClick={sendRequest}
           type="button"
+          disabled={loading}
           className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-black hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
         >
           {type === "signup" ? "Sign Up" : "Sign In"}
