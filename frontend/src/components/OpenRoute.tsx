@@ -6,7 +6,7 @@ const OpenRoute = ({ childern }: any) => {
   if (token !== null) {
     return <Navigate to={"/blogs"} />;
   } else {
-    toast.custom("login first");
+    toast.error("login first");
     return <Navigate to={"/signin"} />;
   }
 };

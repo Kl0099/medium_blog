@@ -109,7 +109,7 @@ export const Blog = () => {
   if (loading) {
     return (
       <div className="container border-none mx-auto p-4">
-        <div className="mb-4 w-[40%] mx-auto">
+        <div className="mb-4 md:w-[40%] mx-auto">
           <Skeleton
             height={30}
             width="60%"
